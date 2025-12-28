@@ -237,9 +237,13 @@ jobs:
       - name: Install Wheel  
         run:
           python3.12 -m pip install setuptools wheel
-      - name: Install Pytorch
+      - name: Install Pytorch and NumPy 2.0
         run: |
+          # Install PyTorch 2.6.0 with CUDA ${{ matrix.cudaversion }}
+          # Note: Colab must use the same PyTorch version (2.6.0) for compatibility
           python3.12 -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu${{ matrix.cudaversion }}
+          # Install NumPy 2.0+ to ensure compatibility with Colab's NumPy 2.0.2
+          python3.12 -m pip install "numpy>=2.0.0"
       - name: Generate Wheels
         run: |
           cd bindings/torch
