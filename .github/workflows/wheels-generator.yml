@@ -245,16 +245,61 @@ jobs:
           cd bindings/torch
           python3.12 setup.py bdist_wheel --plat-name linux_x86_64
         env:
-          INCLUDE_ARCH: ${{ matrix.arch }} 
+          INCLUDE_ARCH: ${{ matrix.arch }}
+          
+      - name: List generated wheels
+        run: |
+          echo "Checking for generated wheels..."
+          ls -la bindings/torch/dist/ || echo "dist directory does not exist"
+          if [ -d "bindings/torch/dist" ]; then
+            echo "Files in dist directory:"
+            ls -lh bindings/torch/dist/
+          fi
+          
+      - name: Verify release exists
+        run: |
+          echo "Checking if release ${{ env.TINY_CUDA_NN_VERSION }} exists..."
+          gh release view ${{ env.TINY_CUDA_NN_VERSION }} --repo ${{ github.repository }} || echo "Release does not exist yet, will be created on first upload"
+          
       - name: Upload assets
         run: |
           cd bindings/torch/dist
-          for filename in *; do
-            # Rename the file by inserting .post${{ matrix.arch }} directly after "1.7"
-            new_filename=$(echo "$filename" | sed "s/1.7/1.7.post${{ matrix.arch }}${{ matrix.torchversion }}${{ matrix.cudaversion }}/")
-            mv "$filename" "$new_filename"
-            echo "Uploading $new_filename"
-            gh release upload ${{ env.TINY_CUDA_NN_VERSION }} "$new_filename" --clobber --repo ${{ github.repository }}
+          if [ ! -d . ] || [ -z "$(ls -A . 2>/dev/null)" ]; then
+            echo "Error: No files found in bindings/torch/dist"
+            exit 1
+          fi
+          wheel_count=0
+          for filename in *.whl; do
+            # Skip if no .whl files match the pattern
+            if [ ! -f "$filename" ]; then
+              continue
+            fi
+            wheel_count=$((wheel_count + 1))
+            echo "Processing wheel file: $filename"
+            # Rename the file by inserting .post${{ matrix.arch }} after the version number
+            # Match pattern like "tinycudann-2.0" or "tinycudann-1.7" and insert postfix
+            new_filename=$(echo "$filename" | sed "s/\(tinycudann-[0-9]\+\.[0-9]\+\)/\1.post${{ matrix.arch }}${{ matrix.torchversion }}${{ matrix.cudaversion }}/")
+            if [ "$filename" != "$new_filename" ]; then
+              echo "Renaming $filename to $new_filename"
+              mv "$filename" "$new_filename"
+            else
+              echo "Warning: Filename pattern did not match, using original: $filename"
+              new_filename="$filename"
+            fi
+            echo "Uploading $new_filename to release ${{ env.TINY_CUDA_NN_VERSION }}"
+            if gh release upload ${{ env.TINY_CUDA_NN_VERSION }} "$new_filename" --clobber --repo ${{ github.repository }}; then
+              echo "✓ Successfully uploaded $new_filename"
+            else
+              echo "✗ Failed to upload $new_filename"
+              exit 1
+            fi
           done
+          if [ $wheel_count -eq 0 ]; then
+            echo "Error: No .whl files found in bindings/torch/dist"
+            echo "Contents of dist directory:"
+            ls -la
+            exit 1
+          fi
+          echo "Uploaded $wheel_count wheel file(s)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
