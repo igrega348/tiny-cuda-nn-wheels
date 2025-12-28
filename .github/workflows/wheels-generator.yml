@@ -164,11 +164,16 @@ jobs:
             cudaversion: 124
             torchversion: 260
             arch: 60
-          # - os: ubuntu-22.04
-          #   cuda: nvidia/cuda:12.4.0-devel-ubuntu22.04
-          #   cudaversion: 124
-          #   torchversion: 260
-          #   arch: 80
+          - os: ubuntu-22.04
+            cuda: nvidia/cuda:12.4.0-devel-ubuntu22.04
+            cudaversion: 124
+            torchversion: 260
+            arch: 75  # T4 GPUs (common in Colab free tier)
+          - os: ubuntu-22.04
+            cuda: nvidia/cuda:12.4.0-devel-ubuntu22.04
+            cudaversion: 124
+            torchversion: 260
+            arch: 80  # A100 GPUs (Colab Pro)
           # - os: ubuntu-22.04
           #   cuda: nvidia/cuda:12.4.0-devel-ubuntu22.04
           #   cudaversion: 124
