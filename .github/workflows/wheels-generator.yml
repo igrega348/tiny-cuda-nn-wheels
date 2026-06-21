@@ -2,7 +2,7 @@ name: CI
 on:
   workflow_dispatch:
 env:
-  TINY_CUDA_NN_VERSION: "1.7.3"
+  TINY_CUDA_NN_VERSION: "1.7.4"
 jobs:
 
   build-tag:
