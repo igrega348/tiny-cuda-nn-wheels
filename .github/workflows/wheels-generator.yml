@@ -211,7 +211,7 @@ jobs:
         run: |
           curl -sS https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python${{ matrix.python-version }} get-pip.py
-          python${{ matrix.python-version }} -m pip install --upgrade pip setuptools wheel
+          python${{ matrix.python-version }} -m pip install --upgrade pip "setuptools<81" wheel
           rm get-pip.py
 
       - name: Install GitHub CLI
@@ -230,7 +230,7 @@ jobs:
           ls -R
       - name: Install Wheel
         run:
-          python${{ matrix.python-version }} -m pip install setuptools wheel
+          python${{ matrix.python-version }} -m pip install "setuptools<81" wheel
       - name: Install PyTorch ${{ matrix.torch-version }} (cu${{ matrix.cudaversion }}) and NumPy
         run: |
           python${{ matrix.python-version }} -m pip install torch==${{ matrix.torch-version }} --index-url https://download.pytorch.org/whl/cu${{ matrix.cudaversion }}
