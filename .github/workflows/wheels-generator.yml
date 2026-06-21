@@ -139,21 +139,21 @@ jobs:
           # ── Tier 3: CUDA 12.8 · PyTorch 2.8.0 · Python 3.12 ──────────────
           # Covers Lightning AI studios, newer cloud installs
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
             python-version: "3.12"
             arch: 86   # RTX 3xxx
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
             python-version: "3.12"
             arch: 89   # L4, RTX 4xxx
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
@@ -162,21 +162,21 @@ jobs:
 
           # ── Tier 3b: CUDA 12.8 · PyTorch 2.8.0 · Python 3.13 ─────────────
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
             python-version: "3.13"
             arch: 86
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
             python-version: "3.13"
             arch: 89
           - os: ubuntu-22.04
-            cuda-image: nvidia/cuda:12.8.0-devel-ubuntu22.04
+            cuda-image: nvidia/cuda:12.8.1-devel-ubuntu22.04
             cudaversion: 128
             torch-version: "2.8.0"
             torchversion: 280
